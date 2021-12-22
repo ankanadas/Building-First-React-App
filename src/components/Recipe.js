@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import IngredientList from './IngredientList';
 import { RecipeContext } from './App';
+import { useEffect } from 'react/cjs/react.development';
 
 export default function Recipe(props) {
     const { handleRecipeDelete } = useContext(RecipeContext)
@@ -12,6 +13,7 @@ export default function Recipe(props) {
             instructions,
             ingredients
         } = props;
+        
     return (
         <div className='recipe'>
             <div className='recipe__header'>
