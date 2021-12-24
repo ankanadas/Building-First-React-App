@@ -1,9 +1,22 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import Ingredient from './Ingredient'
 import RecipeIngredientsEdit from './RecipeIngredientsEdit'
+import { RecipeContext } from './App'
 
 export default function RecipeEdit({recipe}) {
-    console.log(recipe);
+    const {handleRecipeChange} = useContext(RecipeContext);
+
+    function handleChanges(changes){
+        handleRecipeChange(recipe.id, {...recipe, ...changes});
+    }
+
+    function handleIngredientChange(id, ingredient) {
+        const newIngredient = [...recipe.ingredients];
+        const index = newIngredient.findIndex(i => i.id === id);
+        newIngredient[index] = ingredient;
+        handleChanges({ingredients : newIngredient})
+    }
+
     return (
         <div className='recipe-edit'>
             <div className='recipe-edit__remove-button-container'>
@@ -20,6 +33,7 @@ export default function RecipeEdit({recipe}) {
                     name="name" 
                     id= "name" 
                     value={recipe.name}
+                    onInput={e => handleChanges({name: e.target.value})}
                     className='recipe-edit__input'
                 />
                 <label 
@@ -32,6 +46,7 @@ export default function RecipeEdit({recipe}) {
                     name="cookTime" 
                     id= "cookTime"
                     value={recipe.cookTime} 
+                    onInput={e => handleChanges({cookTime: e.target.value})}
                     className='recipe-edit__input'
                 />
                 <label 
@@ -45,6 +60,7 @@ export default function RecipeEdit({recipe}) {
                     name="servings" 
                     id= "servings" 
                     value={recipe.servings}
+                    onInput={e => handleChanges({servings: parseInt(e.target.value) || ''})}
                     className='recipe-edit__input'
                 />
                 <label 
@@ -56,6 +72,7 @@ export default function RecipeEdit({recipe}) {
                     name="instructions" 
                     className='recipe-edit__input'
                     value={recipe.instructions}
+                    onInput={e => handleChanges({instructions: e.target.value})}
                     id="instructions" />
             </div>
             <br />
@@ -67,6 +84,7 @@ export default function RecipeEdit({recipe}) {
                 {recipe.ingredients.map(ingredient => (
                     <RecipeIngredientsEdit 
                         key={ingredient.id} 
+                        handleIngredientChange = {handleIngredientChange}
                         ingredient = {ingredient}
                     />
                 ))}
